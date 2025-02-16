@@ -3,8 +3,8 @@ Run shell commands on a linux host from a telegram bot.
 
 ## Description
 Gives you the possibility to run shell commands on a linux host from a telegram bot with `/run`.  
-It also blacklists dangerous commands like "rm -rf", "shutdown", "reboot", "poweroff", "halt". You can add more commands while running setup.py.  
-The user_id and bot token get encrypted with AES.  
+It also blacklists dangerous commands like `rm -rf`, `shutdown`, `reboot`, `poweroff`, `halt`. You can add more commands while running `setup.py`.  
+The `user_id` and `bot token` get encrypted with AES.  
 
 Example:  
 ![telegram-servermanager_example](https://github.com/user-attachments/assets/b988d424-66a0-4aec-a461-3ff9e092a38f)
@@ -103,3 +103,4 @@ systemctl start tg-servermanager.service
 
 ## Acknowledgments
 * [Github - xgaia/serverbot](https://github.com/xgaia/serverbot?tab=readme-ov-file) for inspiration
+* ChatGPT for helping me
