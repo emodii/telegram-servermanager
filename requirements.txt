@@ -1,2 +1,2 @@
-cryptography==44.0.1
+keyring==25.6.0
 python-telegram-bot==21.10
