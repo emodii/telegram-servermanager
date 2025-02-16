@@ -76,14 +76,14 @@ Tested with:
 
 ### Run the servermanger as a service
 
-Create the file `/etc/systemd/system/tg-servermanager.service` with following input. Replace `/path/to` with your path, where the directory `servermanger` is placed.    
+Create the file `/etc/systemd/system/tg-servermanager.service` with following input. Replace `/path/to` with your path, where the directory `telegram_servermanager` is placed.    
 
 ```
 [Unit]
 Description=Telegram Servermanager
 After=network.target
 [Service]
-ExecStart=/path/to/telegram-servermanager/venv/bin/python /path/to/servermanager/telegram_servermanager.py
+ExecStart=/path/to/telegram-servermanager/venv/bin/python /path/to/telegram-servermanager/telegram_servermanager.py
 WorkingDirectory=/path/to/telegram-servermanager/
 Restart=always
 User=tgbot
