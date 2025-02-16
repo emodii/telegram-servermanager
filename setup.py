@@ -5,7 +5,7 @@ from cryptography.fernet import Fernet
 
 CONFIG_FILE = "config.ini"
 KEY_FILE = "secret.key"
-DEFAULT_BLACKLIST = ["rm -rf", "shutdown", "reboot", "poweroff", "halt"]
+DEFAULT_BLACKLIST = ["rm -rf", "shutdown", "reboot", "poweroff", "halt", "cat", "nano"]
 
 def generate_key():
     """Generates a secret key and saves it to a file"""
