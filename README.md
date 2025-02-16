@@ -4,14 +4,13 @@ Run shell commands on a linux host from a telegram bot.
 ## Description
 Gives you the possibility to run shell commands on a linux host from a telegram bot with `/run`.  
 It also blacklists dangerous commands like `rm -rf`, `shutdown`, `reboot`, `poweroff`, `halt`. You can add more commands while running `setup.py`.  
-The `user_id` and `bot token` get safely safed in python-keyring.  
 
 Example:  
 ![telegram-servermanager_example](https://github.com/user-attachments/assets/b988d424-66a0-4aec-a461-3ff9e092a38f)
   
 Tested with:    
 * Debian 12 Server  
-* Python3: python-telegram-bot==21.10, keyring==25.6.0
+* Python3: python-telegram-bot==21.10, cryptography==44.0.1
 * Telegram
 
 ## Getting Started  
@@ -55,7 +54,7 @@ Tested with:
      ```sh
      pip install -r requirements.txt
      ```
-* Run setup.py to start the setup. You will get asked for your `bot-token` and your `user_id`, which will get safed in python-keyring.  
+* Run setup.py to start the setup. You will get asked for your `bot-token` and your `user_id`. You can also add more commands to the blacklist here.
      ```sh
      python3 setup.py  
      ```
@@ -94,8 +93,6 @@ systemctl start tg-servermanager.service
 ```
 
 ## Version History
-* 1.1
-    * Security hardening with python3-keyring. `Bot-token` and `user_id` will be safed in the keyring.
 * 1.0
     * Initial Release
 
