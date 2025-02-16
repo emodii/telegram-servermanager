@@ -42,8 +42,8 @@ Tested with:
      ```sh
      git clone https://github.com/emodii/telegram-servermanager.git
      # give your new user permission to the scripts and login as tgbot
-     chown -R tgbot:tgbot servermanager && su - tgbot
-     cd servermanager
+     chown -R tgbot:tgbot telegram-servermanager && su - tgbot
+     cd telegram-servermanager
      ``` 
 * Create a new python3 venv and activate it
      ```sh
@@ -83,8 +83,8 @@ Create the file `/etc/systemd/system/tg-servermanager.service` with following in
 Description=Telegram Servermanager
 After=network.target
 [Service]
-ExecStart=/path/to/servermanager/venv/bin/python /path/to/servermanager/telegram_servermanager.py
-WorkingDirectory=/path/to/servermanager/
+ExecStart=/path/to/telegram-servermanager/venv/bin/python /path/to/servermanager/telegram_servermanager.py
+WorkingDirectory=/path/to/telegram-servermanager/
 Restart=always
 User=tgbot
 Group=tgbot
