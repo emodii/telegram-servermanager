@@ -63,7 +63,7 @@ Tested with:
      ```sh
      chmod 600 config.ini secret.key
      ```
-* After the setup has finished, you can start the bot with telegram_shell_bot.py
+* After the setup has finished, you can start the bot with telegram_servermanager.py  
      ```sh
      python3 telegram_servermanager.py  
      ```
@@ -83,7 +83,7 @@ Create the file `/etc/systemd/system/tg-servermanager.service` with following in
 Description=Telegram Servermanager
 After=network.target
 [Service]
-ExecStart=/path/to/servermanager/venv/bin/python /path/to/servermanager/telegram_shell_bot.py
+ExecStart=/path/to/servermanager/venv/bin/python /path/to/servermanager/telegram_servermanager.py
 WorkingDirectory=/path/to/servermanager/
 Restart=always
 User=tgbot
