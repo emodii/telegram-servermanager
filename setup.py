@@ -60,7 +60,7 @@ def get_user_input():
 def main():
     """Runs the setup process"""
     get_user_input()
-    print("Setup completed. Start the bot with: python3 telegram_shell_bot.py")
+    print("Setup completed. Start the bot with: python3 telegram_servermanager.py")
 
 if __name__ == "__main__":
     main()
