@@ -107,7 +107,7 @@ async def wake_on_lan(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await update.message.reply_text(f"Failed to send Wake-on-LAN packet: {str(e)}")
 
 async def manage_service(update: Update, context: ContextTypes.DEFAULT_TYPE, action: str) -> None:
-    # Starts, stops, or checks the status of a systemd service
+    # checks the status of a systemd service
     user_id = update.effective_user.id
 
     if user_id not in ALLOWED_USERS:
@@ -130,17 +130,8 @@ async def manage_service(update: Update, context: ContextTypes.DEFAULT_TYPE, act
             result = subprocess.run(["systemctl", "status", service_file], capture_output=True, text=True)
             output = result.stdout.split("\n")[:10]  # Limit output to avoid long messages
             await update.message.reply_text(f"Status of '{service_name}':\n" + "\n".join(output))
-        else:
-            subprocess.run(["sudo", "systemctl", action, service_file], check=True)
-            await update.message.reply_text(f"Service '{service_name}' {action}ed successfully.")
     except Exception as e:
         await update.message.reply_text(f"Failed to {action} service: {str(e)}")
-
-async def start_service(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await manage_service(update, context, "start")
-
-async def stop_service(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await manage_service(update, context, "stop")
 
 async def status_service(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await manage_service(update, context, "status")
@@ -152,8 +143,7 @@ def main():
     # Starts the Telegram bot
     app = Application.builder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start_service))
-    app.add_handler(CommandHandler("stop", stop_service))
+    app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("status", status_service))
     app.add_handler(CommandHandler("run", run_command))
     app.add_handler(CommandHandler("wake", wake_on_lan))
