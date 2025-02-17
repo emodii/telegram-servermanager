@@ -32,22 +32,31 @@ Tested with:
 * Telegram bot  
 
 ### Installing
-#### Get a Telegram bot token:  
+#### Telegram:
+Get a Telegram bot token:  
 * You need a telegram bot. To do this, send the command `/newbot` to [BotFather](https://t.me/botfather). Safely secure your token.  
-
-#### Get your Telegram user_id:  
+* Add the used commands to your bot with `/setcommands`:
+     ```
+     run - run a command on your server
+     wake - wake a client up with WakeOnLan
+     start - start a service
+     stop - stop a service
+     status - get status of a service
+     ```
+Get your Telegram user_id:  
 * Send the message `/start` to [userinfobot](https://t.me/userinfobot) to get your user id. Safely secure your user_id.  
 
 #### On your linux server:
 
-* Security notice: Create a new user with low privileges to run the bot.  
+* Security notice: Create a new user with low privileges to run the bot (Example: "tgbot").
+  You can run it as root, but i recommend to use a low privilege user!  
      ```sh
      sudo adduser tgbot
      ```  
 * Install dependencies:  
      ```sh
      # Debian/Ubuntu
-     sudo apt install python3 python3-pip python3-venv
+     sudo apt install python3 python3-pip python3-venv wakeonlan
      ```
 * Clone the repository: 
      ```sh
@@ -106,6 +115,23 @@ Now you can use the service via systemctl like any other!
 systemctl start tg-servermanager.service
 ```
 
+---
+
+### Allowing your low privilege user to manage services
+If you create a user (example: tgbot) for the bot, the user needs the permissions to manage services, if you want to use `/start` and `/stop`.  
+Open the file visudo with `sudo visudo` and add the following to the bottom of the file:  
+```sh
+# tgbot services
+tgbot ALL=(ALL) NOPASSWD: /usr/bin/systemctl start nameofservice.service
+tgbot ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop nameofservice.service
+```
+
+## Troubleshooting
+If you have any problems, please check:
+* if your telegram bot token and user_id is correct
+* ensure that the permissions on the scripts are correct
+* run the `setup.py` file again
+
 ## Version History
 * 1.1
     * change: blacklist is now optional and not forced
@@ -113,6 +139,9 @@ systemctl start tg-servermanager.service
     * added: /stop, /start, /status to manage system services
 * 1.0
     * Initial Release
+
+## Ideas
+* adding commands to manage docker containers
 
 ## Acknowledgments
 * [Github - xgaia/serverbot](https://github.com/xgaia/serverbot?tab=readme-ov-file) for inspiration
