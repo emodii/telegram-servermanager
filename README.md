@@ -2,9 +2,12 @@
 Run shell commands on a linux host from a telegram bot.
 
 ## Description
-Gives you the possibility to **run shell commands** on a linux host from a telegram bot with `/run`.  
-You can also **manage services** with `/start`, `/stop` and `/run`, **WakeOnLan** is added by using `/wake`.  
-It also **blacklists dangerous commands** like `rm -rf`, `shutdown`, `reboot`, `poweroff` and `halt`. You can extend this list!   
+First of all: this project is not finished, more security options will come. Use this bot carefully!  
+  
+This project gives you the possibility to **run shell commands** on a linux host from a telegram bot with `/run`.  
+You can also **check service status** with `/status`, **WakeOnLan** is added by using `/wake`.  
+It also **blacklists dangerous commands** like `rm -rf`, `shutdown`, `reboot`, `poweroff` and `halt`. You can extend this list!  
+A whitelist option will be added soon!  
 
 ## Examples
 /run:  
@@ -15,9 +18,6 @@ blacklisted command:
 
 /wake (WakeOnLan):  
 ![tgbot-wol](https://github.com/user-attachments/assets/6f900c60-3cd5-4f5d-885d-64ee3eddd4ba)
-
-/start (managing services):  
-![tgbot-service](https://github.com/user-attachments/assets/65470b3b-2583-4879-96fb-26ed72c659d0)
 
 
 Tested with:    
@@ -39,8 +39,6 @@ Get a Telegram bot token:
      ```
      run - run a command on your server
      wake - wake a client up with WakeOnLan
-     start - start a service
-     stop - stop a service
      status - get status of a service
      ```
 Get your Telegram user_id:  
@@ -117,15 +115,6 @@ systemctl start tg-servermanager.service
 
 ---
 
-### Allowing your low privilege user to manage services
-If you create a user (example: tgbot) for the bot, the user needs the permissions to manage services, if you want to use `/start` and `/stop`.  
-Open the file visudo with `sudo visudo` and add the following to the bottom of the file:  
-```sh
-# tgbot services
-tgbot ALL=(ALL) NOPASSWD: /usr/bin/systemctl start nameofservice.service
-tgbot ALL=(ALL) NOPASSWD: /usr/bin/systemctl stop nameofservice.service
-```
-
 ## Troubleshooting
 If you have any problems, please check:
 * if your telegram bot token and user_id is correct
@@ -140,9 +129,14 @@ If you have any problems, please check:
 * 1.0
     * Initial Release
 
-## Ideas
-* adding commands to manage docker containers
+## To-Do
+* security: get a more secure solution to run sudo commands, maybe with a wrapper script with contolled permissions
+* security: add logging for auditing
+* security: add command whitelist instead of blacklist as default, let user choose between these (whitelist == default)
+    * let user add own custom commands for the bot in the setup to the whitelist
+* add commands to manage docker containers?
 
 ## Acknowledgments
 * [Github - xgaia/serverbot](https://github.com/xgaia/serverbot?tab=readme-ov-file) for inspiration
+* Reddit: the `r/selfhosted` community
 * ChatGPT for helping me
