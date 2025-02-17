@@ -2,12 +2,24 @@
 Run shell commands on a linux host from a telegram bot.
 
 ## Description
-Gives you the possibility to run shell commands on a linux host from a telegram bot with `/run`.  
-It also blacklists dangerous commands like `rm -rf`, `shutdown`, `reboot`, `poweroff`, `halt`. You can add more commands while running `setup.py`.  
+Gives you the possibility to **run shell commands** on a linux host from a telegram bot with `/run`.  
+You can also **manage services** with `/start`, `/stop` and `/run`, **WakeOnLan** is added by using `/wake`.  
+It also **blacklists dangerous commands** like `rm -rf`, `shutdown`, `reboot`, `poweroff` and `halt`. You can extend this list!   
 
-Example:  
-![telegram-servermanager_example](https://github.com/user-attachments/assets/b988d424-66a0-4aec-a461-3ff9e092a38f)
-  
+## Examples
+/run:  
+![tg-run](https://github.com/user-attachments/assets/255c3930-17c2-49aa-8b9a-46a951861286)
+
+blacklisted command:  
+![tgbot-blacklist](https://github.com/user-attachments/assets/6530fbe3-1c07-451f-8df9-4eb1e85959ec)
+
+/wake (WakeOnLan):  
+![tgbot-wol](https://github.com/user-attachments/assets/6f900c60-3cd5-4f5d-885d-64ee3eddd4ba)
+
+/start (managing services):  
+![tgbot-service](https://github.com/user-attachments/assets/65470b3b-2583-4879-96fb-26ed72c659d0)
+
+
 Tested with:    
 * Debian 12 Server  
 * Python3: python-telegram-bot==21.10, cryptography==44.0.1
@@ -54,7 +66,9 @@ Tested with:
      ```sh
      pip install -r requirements.txt
      ```
-* Run setup.py to start the setup. You will get asked for your `bot-token` and your `user_id`. You can also add more commands to the blacklist here.
+* Run setup.py to start the setup. You will get asked for your `bot-token` and your `user_id`.  
+  Choose, if you want to use the blacklist and add more commands to it.  
+  Select clients, that can get waked up with WakeOnLan and services, which can be managed with start, stop and status.  
      ```sh
      python3 setup.py  
      ```
@@ -93,6 +107,10 @@ systemctl start tg-servermanager.service
 ```
 
 ## Version History
+* 1.1
+    * change: blacklist is now optional and not forced
+    * added: /wake to wake a client with WakeOnLan
+    * added: /stop, /start, /status to manage system services
 * 1.0
     * Initial Release
 
