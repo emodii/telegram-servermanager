@@ -122,6 +122,8 @@ If you have any problems, please check:
 * run the `setup.py` file again
 
 ## Version History
+* 1.2
+    * removed: /stop and /start to manage system services (due to sudo security issues)
 * 1.1
     * change: blacklist is now optional and not forced
     * added: /wake to wake a client with WakeOnLan
