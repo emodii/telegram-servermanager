@@ -73,7 +73,7 @@ Get your Telegram user_id:
      ```
 * Run setup.py to start the setup. You will get asked for your `bot-token` and your `user_id`.  
   Choose, if you want to use the blacklist and add more commands to it.  
-  Select clients, that can get waked up with WakeOnLan and services, which can be managed with start, stop and status.  
+  Select clients, that can get waked up with WakeOnLan and services, which can be status checked.  
      ```sh
      python3 setup.py  
      ```
