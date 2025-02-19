@@ -1,4 +1,4 @@
-# telegram-servermanager
+# :speech_balloon: telegram-servermanager
 Run shell commands on a linux host from a telegram bot.
 
 ## Description
@@ -6,19 +6,18 @@ First of all: this project is not finished, more security options will come. Use
   
 This project gives you the possibility to **run shell commands** on a linux host from a telegram bot with `/run`.  
 You can also **check service status** with `/status`, **WakeOnLan** is added by using `/wake`.  
-It also **blacklists dangerous commands** like `rm -rf`, `shutdown`, `reboot`, `poweroff` and `halt`. You can extend this list!  
-A whitelist option will be added soon!  
+Choose between **whitelist** or **blacklist** for the commands you want to run (whitelist is strongly recommended)!   
+Both options come with a pre-defined list to help you, and you can also add more commands to the list while running the setup.  
 
 ## Examples
 /run:  
 ![tg-run](https://github.com/user-attachments/assets/255c3930-17c2-49aa-8b9a-46a951861286)
 
-blacklisted command:  
-![tgbot-blacklist](https://github.com/user-attachments/assets/6530fbe3-1c07-451f-8df9-4eb1e85959ec)
-
 /wake (WakeOnLan):  
 ![tgbot-wol](https://github.com/user-attachments/assets/6f900c60-3cd5-4f5d-885d-64ee3eddd4ba)
 
+whitelist:  
+![tgbot-whitelist](https://github.com/user-attachments/assets/f833d8c2-38df-478e-a688-a379099555e1)
 
 Tested with:    
 * Debian 12 Server  
@@ -45,9 +44,8 @@ Get your Telegram user_id:
 * Send the message `/start` to [userinfobot](https://t.me/userinfobot) to get your user id. Safely secure your user_id.  
 
 #### On your linux server:
-
-* Security notice: Create a new user with low privileges to run the bot (Example: "tgbot").
-  You can run it as root, but i recommend to use a low privilege user!  
+* Security notice: Create a new user with low privileges to run the bot (Example: "tgbot").  
+  You can run it as root, but i highly recommend to use a low privilege user!  
      ```sh
      sudo adduser tgbot
      ```  
@@ -86,7 +84,7 @@ Get your Telegram user_id:
 
 #### Telegram bot:
 * After starting `telegram_servermanager.py` your bot should say `Welcome! Use /run <command> to execute a shell command on your server.`
-* Now you can start running commands with `/run`!
+* Now you can start running commands with `/run`, use WakeOnLan with `/wake` and check the status of your configured services with `/status`!
 
 ---
 
@@ -123,6 +121,9 @@ If you have any problems, please check:
 
 ## Version History
 * 1.2
+    * added: whitelist option, choose between whitelist and blacklist
+    * more explanations when running the setup
+* 1.1.1
     * removed: /stop and /start to manage system services (due to sudo security issues)
 * 1.1
     * change: blacklist is now optional and not forced
@@ -134,8 +135,7 @@ If you have any problems, please check:
 ## To-Do
 * security: get a more secure solution to run sudo commands, maybe with a wrapper script with contolled permissions
 * security: add logging for auditing
-* security: add command whitelist instead of blacklist as default, let user choose between these (whitelist == default)
-    * let user add own custom commands for the bot in the setup to the whitelist
+* let user add own custom commands for the bot in the setup to the whitelist
 * add commands to manage docker containers?
 
 ## Acknowledgments
