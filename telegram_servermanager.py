@@ -31,11 +31,14 @@ try:
     key = load_key()
     encrypted_token = config["Telegram"]["bot_token"]
     BOT_TOKEN = decrypt_token(encrypted_token, key)
-
     ALLOWED_USERS = set(map(int, config["Telegram"]["allowed_users"].split(",")))
 
-    # Load blacklisted commands from config
-    BLACKLISTED_COMMANDS = config["Security"]["blacklisted_commands"].split(",")
+    MODE = config["Security"].get("mode", "whitelist")  # Standard: Whitelist
+    
+    if MODE == "blacklist":
+        BLOCKED_COMMANDS = config["Security"].get("commands", "").split(",")
+    else:
+        ALLOWED_COMMANDS = config["Security"].get("commands", "").split(",")
     
     # Load Wake-on-LAN clients
     WOL_CLIENTS = dict(config["WakeOnLAN"]) if "WakeOnLAN" in config else {}
@@ -47,8 +50,8 @@ except (KeyError, ValueError):
     print("Error: Configuration file not found or invalid. Please run setup.py first.")
     exit(1)
 
+
 async def run_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    # Executes a shell command and returns the output
     user_id = update.effective_user.id
 
     if user_id not in ALLOWED_USERS:
@@ -60,14 +63,17 @@ async def run_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await update.message.reply_text("Please provide a command to execute.")
         return
 
-    # Check if the command contains any blacklisted keywords
-    for bad_cmd in BLACKLISTED_COMMANDS:
-        if bad_cmd in command:
-            await update.message.reply_text(f"Command '{command}' is not allowed.")
+    if MODE == "blacklist":
+        for bad_cmd in BLOCKED_COMMANDS:
+            if bad_cmd in command:
+                await update.message.reply_text(f"Command '{command}' is not allowed.")
+                return
+    else:
+        if command not in ALLOWED_COMMANDS:
+            await update.message.reply_text(f"Command '{command}' is not in the whitelist.")
             return
 
     try:
-        # Execute the shell command
         output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT, text=True, timeout=10)
         output = output.strip() if output else "Command executed successfully, but no output was returned."
     except subprocess.CalledProcessError as e:
@@ -75,7 +81,6 @@ async def run_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     except Exception as e:
         output = f"Error: {str(e)}"
 
-    # Limit output length to avoid exceeding Telegram message size
     if len(output) > 4000:
         output = output[:4000] + "\n... [truncated]"
 
@@ -102,7 +107,7 @@ async def wake_on_lan(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     mac_address = WOL_CLIENTS[client_name]
     try:
         subprocess.run(["wakeonlan", mac_address], check=True)
-        await update.message.reply_text(f"Wake-on-LAN packet sent to {client_name} ({mac_address}).")
+        await update.message.reply_text(f"Wake-on-LAN packet sent to {client_name}.")
     except Exception as e:
         await update.message.reply_text(f"Failed to send Wake-on-LAN packet: {str(e)}")
 
