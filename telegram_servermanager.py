@@ -1,6 +1,7 @@
 import os
 import configparser
 import subprocess
+import logging
 from cryptography.fernet import Fernet
 from telegram import Update
 from telegram.ext import Application, CommandHandler, ContextTypes
@@ -8,6 +9,25 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 # Configuration file
 CONFIG_FILE = "config.ini"
 KEY_FILE = "secret.key"
+LOG_FILE = "/var/log/telegram-servermanager/bot_activity.log"
+
+# Logging setup
+os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)  # make sure, that the logging folder exists 
+logging.basicConfig(
+    filename=LOG_FILE,
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
+
+# deactivate info logs from httpx and telegram
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("telegram").setLevel(logging.WARNING)
+
+def user_info(update: Update) -> str:
+    # Returns a standardized string with user information for logging.
+    user = update.effective_user
+    username = user.username if user.username else f"{user.first_name} {user.last_name or ''}".strip()
+    return f"User {username} (ID: {user.id})"
 
 def load_key():
     # Loads the encryption key
@@ -55,21 +75,25 @@ async def run_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     user_id = update.effective_user.id
 
     if user_id not in ALLOWED_USERS:
+        logging.warning(f"{user_info(update)} attempted to run command and is not in ALLOWED_USERS")
         await update.message.reply_text("Access denied.")
         return
 
     command = " ".join(context.args)
     if not command:
+        logging.info(f"{user_info(update)} attempted to run an empty command.")
         await update.message.reply_text("Please provide a command to execute.")
         return
 
     if MODE == "blacklist":
         for bad_cmd in BLOCKED_COMMANDS:
             if bad_cmd in command:
-                await update.message.reply_text(f"Command '{command}' is not allowed.")
-                return
+               logging.warning(f"{user_info(update)} executed blacklisted command: '{command}'") 
+               await update.message.reply_text(f"Command '{command}' is not allowed.")
+               return
     else:
         if command not in ALLOWED_COMMANDS:
+            logging.warning(f"{user_info(update)} executed forbidden command: '{command}'.")
             await update.message.reply_text(f"Command '{command}' is not in the whitelist.")
             return
 
@@ -84,6 +108,7 @@ async def run_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     if len(output) > 4000:
         output = output[:4000] + "\n... [truncated]"
 
+    logging.info(f"{user_info(update)} executed command: '{command}'")
     await update.message.reply_text(f"Output:\n{output}")
 
 async def wake_on_lan(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -91,24 +116,29 @@ async def wake_on_lan(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     user_id = update.effective_user.id
 
     if user_id not in ALLOWED_USERS:
+        logging.warning(f"{user_info(update)} attempted to run command and is not in ALLOWED_USERS")
         await update.message.reply_text("Access denied.")
         return
 
     if not context.args:
+        logging.info(f"{user_info(update)} attempted to run an empty WakeOnLan command.")
         await update.message.reply_text("Usage: /wake <ClientName>")
         return
 
     client_name = context.args[0]
     
     if client_name not in WOL_CLIENTS:
+        logging.info(f"{user_info(update)} attempted to wake a unknown client '{client_name}'.")
         await update.message.reply_text(f"Client '{client_name}' not found in Wake-on-LAN list.")
         return
 
     mac_address = WOL_CLIENTS[client_name]
     try:
         subprocess.run(["wakeonlan", mac_address], check=True)
+        logging.info(f"{user_info(update)} executed /wake command: '{client_name}'")
         await update.message.reply_text(f"Wake-on-LAN packet sent to {client_name}.")
     except Exception as e:
+        logging.info(f"{user_info(update)} executed /wake command, but it failed. ")
         await update.message.reply_text(f"Failed to send Wake-on-LAN packet: {str(e)}")
 
 async def manage_service(update: Update, context: ContextTypes.DEFAULT_TYPE, action: str) -> None:
@@ -116,16 +146,19 @@ async def manage_service(update: Update, context: ContextTypes.DEFAULT_TYPE, act
     user_id = update.effective_user.id
 
     if user_id not in ALLOWED_USERS:
+        logging.warning(f"{user_info(update)} attempted to run command and is not in ALLOWED_USERS")
         await update.message.reply_text("Access denied.")
         return
 
     if not context.args:
-        await update.message.reply_text(f"Usage: /{action} <ServiceName>")
+        logging.info(f"{user_info(update)} attempted to run an empty /status command.")
+        await update.message.reply_text(f"Usage: /status <ServiceName>")
         return
 
     service_name = context.args[0]
     
     if service_name not in SYSTEMD_SERVICES:
+        logging.info(f"{user_info(update)} attempted to check status of unknown service '{service_name}'.")
         await update.message.reply_text(f"Service '{service_name}' not found in service list.")
         return
 
@@ -134,9 +167,11 @@ async def manage_service(update: Update, context: ContextTypes.DEFAULT_TYPE, act
         if action == "status":
             result = subprocess.run(["systemctl", "status", service_file], capture_output=True, text=True)
             output = result.stdout.split("\n")[:10]  # Limit output to avoid long messages
+            logging.info(f"{user_info(update)} executed /status command: '{service_name}'")
             await update.message.reply_text(f"Status of '{service_name}':\n" + "\n".join(output))
     except Exception as e:
-        await update.message.reply_text(f"Failed to {action} service: {str(e)}")
+        logging.info(f"{user_info(update)} executed /status command, but it failed.")
+        await update.message.reply_text(f"Failed to /status service: {str(e)}")
 
 async def status_service(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await manage_service(update, context, "status")
