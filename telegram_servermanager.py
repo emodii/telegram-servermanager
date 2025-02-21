@@ -12,7 +12,6 @@ KEY_FILE = "secret.key"
 LOG_FILE = "bot_activity.log"
 
 # Logging setup
-os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)  # make sure, that the logging folder exists 
 logging.basicConfig(
     filename=LOG_FILE,
     level=logging.INFO,
