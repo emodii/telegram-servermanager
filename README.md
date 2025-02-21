@@ -2,13 +2,15 @@
 Run shell commands on a linux host from a telegram bot.
 
 ## Description
-First of all: this project is not finished, more security options will come. Use this bot carefully!  
-  
-This project gives you the possibility to **run shell commands** on a linux host from a telegram bot with `/run`.  
-You can also **check service status** with `/status`, **WakeOnLan** is added by using `/wake`.  
-Choose between **whitelist** or **blacklist** for the commands you want to run (whitelist is strongly recommended)!   
-Both options come with a pre-defined list to help you, and you can also add more commands to the list while running the setup.  
-Loggin: View the log-file to see, what is happening with your bot. Do users run forbidden commands? Anyone evil trying to access your bot?  
+This project gives you the possibility to **run shell commands** on a linux host from a telegram bot.  
+Functions:
+* `/run`: run shell commands
+* `/status`: check status of a service
+* `/wake`: wake up clients in your network with WakeOnLan
+* Choose between **whitelist** or **blacklist** for the commands you want to run. You can add commands to the list in the setup.  
+* Logging: check the `bot_activity.log` to see, if someone is trying something evil.  
+
+Use this bot carefully! Dont expose dangerous commands to it.  
 
 ## Examples
 /run:  
@@ -19,6 +21,9 @@ Loggin: View the log-file to see, what is happening with your bot. Do users run 
 
 whitelist:  
 ![tgbot-whitelist](https://github.com/user-attachments/assets/f833d8c2-38df-478e-a688-a379099555e1)
+
+Logging:  
+![tgbot-log](https://github.com/user-attachments/assets/0d081cba-5b31-4002-8573-d746f88e26e1)
 
 Tested with:    
 * Debian 12 Server  
@@ -59,8 +64,6 @@ Get your Telegram user_id:
      ```sh
      git clone https://github.com/emodii/telegram-servermanager.git
      # give your new user permission to the scripts and login as tgbot
-     mkdir /var/log/var/log/telegram-servermanager
-     chown -R tgbot:tgbot /var/log/var/log/telegram-servermanager
      chown -R tgbot:tgbot telegram-servermanager && su - tgbot
      cd telegram-servermanager
      ``` 
@@ -123,10 +126,11 @@ If you have any problems, please check:
 * if your telegram bot token and user_id is correct
 * ensure that the permissions on the scripts are correct
 * run the `setup.py` file again
+* check the log-file in your telegram-servermanager directory (`bot_activity.log`)
 
 ## Version History
 * 1.3
-    * added: logging, check your log at /var/log/telegram-servermanager/bot_activity.log
+    * added: logging, check your log: `bot_activity.log`
 * 1.2
     * added: whitelist option, choose between whitelist and blacklist
     * more explanations when running the setup
@@ -141,7 +145,6 @@ If you have any problems, please check:
 
 ## To-Do
 * security: get a more secure solution to run sudo commands, maybe with a wrapper script with contolled permissions
-* security: add logging for auditing
 * let user add own custom commands for the bot in the setup to the whitelist
 * add commands to manage docker containers?
 
