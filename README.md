@@ -8,6 +8,7 @@ This project gives you the possibility to **run shell commands** on a linux host
 You can also **check service status** with `/status`, **WakeOnLan** is added by using `/wake`.  
 Choose between **whitelist** or **blacklist** for the commands you want to run (whitelist is strongly recommended)!   
 Both options come with a pre-defined list to help you, and you can also add more commands to the list while running the setup.  
+Loggin: View the log-file to see, what is happening with your bot. Do users run forbidden commands? Anyone evil trying to access your bot?  
 
 ## Examples
 /run:  
@@ -54,10 +55,12 @@ Get your Telegram user_id:
      # Debian/Ubuntu
      sudo apt install python3 python3-pip python3-venv wakeonlan
      ```
-* Clone the repository: 
+* Clone the repository, create directory for log and change permissions for your low privilege user
      ```sh
      git clone https://github.com/emodii/telegram-servermanager.git
      # give your new user permission to the scripts and login as tgbot
+     mkdir /var/log/var/log/telegram-servermanager
+     chown -R tgbot:tgbot /var/log/var/log/telegram-servermanager
      chown -R tgbot:tgbot telegram-servermanager && su - tgbot
      cd telegram-servermanager
      ``` 
@@ -86,6 +89,8 @@ Get your Telegram user_id:
 * After starting `telegram_servermanager.py` your bot should say `Welcome! Use /run <command> to execute a shell command on your server.`
 * Now you can start running commands with `/run`, use WakeOnLan with `/wake` and check the status of your configured services with `/status`!
 
+#### Logging:  
+* You can view your log with `tail -f /var/log/telegram-servermanager/bot_activity.log`
 ---
 
 ### Run the servermanger as a service
