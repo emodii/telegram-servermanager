@@ -125,6 +125,8 @@ If you have any problems, please check:
 * run the `setup.py` file again
 
 ## Version History
+* 1.3
+    * added: logging, check your log at /var/log/telegram-servermanager/bot_activity.log
 * 1.2
     * added: whitelist option, choose between whitelist and blacklist
     * more explanations when running the setup
