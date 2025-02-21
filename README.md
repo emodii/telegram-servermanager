@@ -93,7 +93,7 @@ Get your Telegram user_id:
 * Now you can start running commands with `/run`, use WakeOnLan with `/wake` and check the status of your configured services with `/status`!
 
 #### Logging:  
-* You can view your log with `tail -f /var/log/telegram-servermanager/bot_activity.log`
+* You can view your log with `tail -f bot_activity.log` in the telegram-servermanger directory.  
 ---
 
 ### Run the servermanger as a service
