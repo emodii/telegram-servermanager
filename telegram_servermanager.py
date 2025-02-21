@@ -9,7 +9,7 @@ from telegram.ext import Application, CommandHandler, ContextTypes
 # Configuration file
 CONFIG_FILE = "config.ini"
 KEY_FILE = "secret.key"
-LOG_FILE = "/var/log/telegram-servermanager/bot_activity.log"
+LOG_FILE = "bot_activity.log"
 
 # Logging setup
 os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)  # make sure, that the logging folder exists 
