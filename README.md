@@ -62,7 +62,7 @@ Get your Telegram user_id:
      ```
 * Clone the repository, create directory for log and change permissions for your low privilege user
      ```sh
-     git clone https://github.com/emodii/telegram-servermanager.git
+     git clone https://github.com/thetorminal/telegram-servermanager.git
      # give your new user permission to the scripts and login as tgbot
      chown -R tgbot:tgbot telegram-servermanager && su - tgbot
      cd telegram-servermanager
